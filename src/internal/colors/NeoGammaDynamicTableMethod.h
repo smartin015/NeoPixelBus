@@ -183,6 +183,7 @@ public:
     // SerialDumpTables is used if you want to generate your own static gamma table class
     // rather than use this dynamically generated table.  Just capture the serial output
     // and use as your initializers for your tables
+#ifdef Serial
     static void SerialDumpTables()
     {
         Serial.println();
@@ -218,6 +219,7 @@ public:
         }
         Serial.println();
     }
+#endif // Serial
 
 private:
     static uint8_t _table[256];
