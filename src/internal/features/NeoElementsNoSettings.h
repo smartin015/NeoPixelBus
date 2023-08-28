@@ -1,6 +1,6 @@
 /*-------------------------------------------------------------------------
-NeoColors includes all the color classes that describe color and
-modify colors for NeoPixelBus
+NeoElementsNoSettings provides feature base classes to describe a 
+    no settings feature
 
 Written by Michael C. Miller.
 
@@ -26,30 +26,23 @@ License along with NeoPixel.  If not, see
 -------------------------------------------------------------------------*/
 #pragma once
 
-#include "colors/NeoHueBlend.h"
+class NeoElementsNoSettings
+{
+public:
+    typedef NeoNoSettings SettingsObject;
+    static const size_t SettingsSize = 0;
 
-#include "colors/RgbColorIndexes.h"
-#include "colors/RgbColorBase.h"
+    static void applySettings([[maybe_unused]] uint8_t* pData, [[maybe_unused]] size_t sizeData, [[maybe_unused]] const SettingsObject& settings)
+    {
+    }
 
-#include "colors/RgbColor.h"
-#include "colors/Rgb16Color.h"
-#include "colors/Rgb48Color.h"
+    static uint8_t* pixels([[maybe_unused]] uint8_t* pData, [[maybe_unused]] size_t sizeData)
+    {
+        return pData;
+    }
 
-#include "colors/HslColor.h"
-#include "colors/HsbColor.h"
-#include "colors/HtmlColor.h"
-
-#include "colors/RgbwColor.h"
-#include "colors/Rgbw64Color.h"
-
-#include "colors/RgbwwColor.h"
-
-#include "colors/SegmentDigit.h"
-
-#include "colors/NeoGamma.h"
-#include "colors/NeoGammaEquationMethod.h"
-#include "colors/NeoGammaCieLabEquationMethod.h"
-#include "colors/NeoGammaTableMethod.h"
-#include "colors/NeoGammaDynamicTableMethod.h"
-#include "colors/NeoGammaNullMethod.h"
-#include "colors/NeoGammaInvertMethod.h"
+    static const uint8_t* pixels([[maybe_unused]] const uint8_t* pData, [[maybe_unused]] size_t sizeData)
+    {
+        return pData;
+    }
+};

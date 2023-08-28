@@ -25,6 +25,8 @@ License along with NeoPixel.  If not, see
 -------------------------------------------------------------------------*/
 #pragma once
 
+struct Rgbw64Color; // forward declared
+
 // ------------------------------------------------------------------------
 // Rgb48Color represents a color object that is represented by Red, Green, Blue
 // component values.  It contains helpful color routines to manipulate the 
@@ -57,10 +59,24 @@ struct Rgb48Color : RgbColorBase
     // ------------------------------------------------------------------------
     Rgb48Color(const RgbColor& color)
     {
+        // x16 = map(x8, 0, 255, 0, 65535); // refactors to just * 257 
         R = (uint16_t)color.R * 257; // 257 = MAXUINT16/MAXUINT8 = 65535/255
-        G = (uint16_t)color.R * 257;
-        B = (uint16_t)color.R * 257;
+        G = (uint16_t)color.G * 257;
+        B = (uint16_t)color.B * 257;
     };
+
+    // ------------------------------------------------------------------------
+    // explicitly Construct a Rgb48Color using RgbwColor
+    // ------------------------------------------------------------------------
+    explicit Rgb48Color(const RgbwColor& color)
+    {
+        *this = RgbColor(color);
+    }
+
+    // ------------------------------------------------------------------------
+    // explicitly Construct a Rgb48Color using Rgbw64Color
+    // ------------------------------------------------------------------------
+    explicit Rgb48Color(const Rgbw64Color& color);
 
     // ------------------------------------------------------------------------
     // Construct a Rgb48Color using HtmlColor
@@ -178,12 +194,36 @@ struct Rgb48Color : RgbColorBase
     Rgb48Color Dim(uint16_t ratio) const;
 
     // ------------------------------------------------------------------------
+    // Dim will return a new color that is blended to black with the given ratio
+    // ratio - (0-255) where 255 will return the original color and 0 will return black
+    // 
+    // NOTE: This is a simple linear blend
+    // ------------------------------------------------------------------------
+    Rgb48Color Dim(uint8_t ratio) const
+    {
+        uint16_t expanded = ratio << 8;
+        return Dim(expanded);
+    }
+
+    // ------------------------------------------------------------------------
     // Brighten will return a new color that is blended to white with the given ratio
     // ratio - (0-65535) where 65535 will return the original color and 0 will return white
     // 
     // NOTE: This is a simple linear blend
     // ------------------------------------------------------------------------
     Rgb48Color Brighten(uint16_t ratio) const;
+
+    // ------------------------------------------------------------------------
+    // Brighten will return a new color that is blended to white with the given ratio
+    // ratio - (0-255) where 255 will return the original color and 0 will return white
+    // 
+    // NOTE: This is a simple linear blend
+    // ------------------------------------------------------------------------
+    Rgb48Color Brighten(uint8_t ratio) const
+    {
+        uint16_t expanded = ratio << 8;
+        return Brighten(expanded);
+    }
 
     // ------------------------------------------------------------------------
     // Darken will adjust the color by the given delta toward black
